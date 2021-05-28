@@ -1,0 +1,61 @@
+﻿@model MvcBoard.Models.Board
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+
+<link href="~/Scripts/summernote/summernote.css" rel="stylesheet" />
+<script src="~/Scripts/summernote/summernote.js"></script>
+
+<h2></h2>
+
+<div class="panel panel-primary">
+    <div class="panel-heading panel-head">글 작성</div>
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.board_subject, "제목", new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-9">
+                        @Html.TextBoxFor(model => model.board_subject, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.board_content, "내용", new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-9">
+                        @Html.TextAreaFor(model => model.board_content, new { @class = "form-control", @row = 5 })
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" onclick="return confirm('게시글을 작성하시겠습니까?')">작성</button>
+                    @Html.ActionLink("취소", "Index", null, new { @class = "btn btn-success", @onclick = "return confirm('취소 하시겠습니까?')" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@Html.ValidationMessageFor(m => m.UserId)
+@Html.ValidationMessageFor(m => m.board_subject)
+@Html.ValidationMessageFor(m => m.board_content)
+
+
+<script>
+    //$(document).ready(function () {
+    // $(‘#Content’).summernote();
+    //});
+    $("#board_content").summernote({
+        height: 300, // set editor height
+        minHeight: null, // set minimum height of editor
+        maxHeight: null, // set maximum height of editor
+        focus: true // set focus to editable area after initializing summernote
+    });
+    $("#board_content").on('summernote.blur.codeview', function () {
+        $("#board_content").val($(board_content).summernote('code'));
+    });
+</script>

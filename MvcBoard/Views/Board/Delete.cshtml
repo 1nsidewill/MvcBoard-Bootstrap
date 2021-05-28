@@ -1,0 +1,64 @@
+﻿@model MvcBoard.Models.Board
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Post</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.board_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.board_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.board_subject)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.board_subject)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.board_content)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.board_content)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.board_writeTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.board_writeTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.board_readCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.board_readCount)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
