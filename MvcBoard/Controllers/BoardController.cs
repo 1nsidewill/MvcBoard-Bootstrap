@@ -54,7 +54,7 @@ namespace MvcBoard.Controllers
                             totalCount = boards.Count();
                             break;
                         case "name":
-                            boards = boardData.Where(x => x.UserId.Contains(keyword)).ToList();
+                            boards = boardData.Where(x => x.board_name.Contains(keyword)).ToList();
                             totalCount = boards.Count();
                             break;
 
@@ -64,7 +64,7 @@ namespace MvcBoard.Controllers
                                .Take(maxListCount).ToList();
 
                 ViewBag.Page = pageNum;
-                ViewBag.TotalCount = boardData.Count();
+                ViewBag.TotalCount = totalCount;
                 ViewBag.MaxListCount = maxListCount;
                 ViewBag.SearchKind = searchKind;
                 ViewBag.Keyword = keyword;
@@ -125,14 +125,16 @@ namespace MvcBoard.Controllers
         // POST: Board/Create
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Create(User _user, Board _board)
+        public ActionResult Create(Board _board)
         {
             try
             {
                 using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
                 {
+                    string identityName = User.Identity.Name;
+                    var username = db.QuerySingleOrDefault<string>("SELECT UserName From userdb WHERE UserId = @identityName", new {identityName = identityName });
                     string sqlQuery = "Insert Into mvcboard (board_name, board_subject, board_content, board_writeTime) Values(@board_name, @board_subject, @board_content, GETDATE())";
-                    var rowsAffected = db.Execute(sqlQuery, new { board_name = _user.UserName, board_subject = _board.board_subject, board_content = _board.board_content });
+                    var rowsAffected = db.Execute(sqlQuery, new { board_name = username, board_subject = _board.board_subject, board_content = _board.board_content });
                 }
 
                 return RedirectToAction("Index");
@@ -173,7 +175,7 @@ namespace MvcBoard.Controllers
                 using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
                 {
 
-                    string sqlQuery = "update mvcboard set board_name='" + _board.UserId + "',board_subject='" + _board.board_subject + "',board_content='" + _board.board_content + "' where board_postNo=" + _board.board_postNo;
+                    string sqlQuery = "update mvcboard set board_subject='" + _board.board_subject + "',board_content='" + _board.board_content + "' where board_postNo=" + _board.board_postNo;
 
                     int rowsAffected = db.Execute(sqlQuery);
                 }

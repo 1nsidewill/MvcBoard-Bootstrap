@@ -28,10 +28,6 @@
                     <div class="col-lg-9">
                         @Html.TextBoxFor(model => model.board_subject, new { @class = "form-control" })
                     </div>
-                    @Html.LabelFor(m => m.board_name, "이름", new { @class = "col-lg-2 control-label" })
-                    <div class="col-lg-9">
-                        @Html.TextBoxFor(model => model.board_name, new { @class = "form-control" })
-                    </div>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(model => model.board_content, "내용", new { @class = "col-lg-2 control-label" })
@@ -48,7 +44,6 @@
     </div>
 </div>
 
-@Html.ValidationMessageFor(m => m.board_name)
 @Html.ValidationMessageFor(m => m.board_subject)
 @Html.ValidationMessageFor(m => m.board_content)
 
