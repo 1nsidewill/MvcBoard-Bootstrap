@@ -15,6 +15,7 @@
                 <div class="navbar-header">
                     @Html.ActionLink("홈", "Index", "Board", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
+                <h1 style="text-align: center">BOARD</h1>
                 <div class="navbar-right">
                     @Html.ActionLink("로그아웃", "LogOut", "Account", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
@@ -35,9 +36,9 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
+        @*<footer>
             <p>&copy; @DateTime.Now.Year - ASP.NET MVC Board</p>
-        </footer>
+        </footer>*@
     </div>
 
     @Scripts.Render("~/bundles/jquery")

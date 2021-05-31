@@ -16,6 +16,6 @@ namespace MvcBoard.Models
         public string board_content { get; set; }
         public DateTime board_writeTime { get; set; }
         public int board_readCount { get; set; }
-        public string UserId { get; set; }
+        public string board_name { get; set; }
     }
 }
