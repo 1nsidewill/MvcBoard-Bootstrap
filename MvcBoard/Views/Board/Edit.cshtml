@@ -5,15 +5,25 @@
 }
 
 
-<link href="~/Scripts/summernote/summernote.css" rel="stylesheet" />
-<script src="~/Scripts/summernote/summernote.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="~/xxxx/Upload.js"></script>
+<script type="text/javascript">
+    upload.init();
+</script>
+
 
 <h2></h2>
 
 
-
 <div class="panel panel-primary">
-    <div class="panel-heading panel-head">글 수정</div>
+    <div class="panel-heading panel-head"></div>
     <div class="panel-body">
         @using (Html.BeginForm())
         {
@@ -31,7 +41,7 @@
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(model => model.board_content, "내용", new { @class = "col-lg-2 control-label" })
-                    <div class="col-lg-9">
+                    <div class="col-lg-12">
                         @Html.TextAreaFor(model => model.board_content, new { @class = "form-control", @row = 5 })
                     </div>
                 </div>
@@ -48,18 +58,14 @@
 @Html.ValidationMessageFor(m => m.board_content)
 
 
-<script>
-    //$(document).ready(function () {
-    // $(‘#Content’).summernote();
-    //});
 
+<script>
     $("#board_content").summernote({
-        height: 300, // set editor height
+        height: 450, // set editor height
         minHeight: null, // set minimum height of editor
         maxHeight: null, // set maximum height of editor
         focus: true // set focus to editable area after initializing summernote
     });
-
     $("#board_content").on('summernote.blur.codeview', function () {
         $("#board_content").val($(board_content).summernote('code'));
     });

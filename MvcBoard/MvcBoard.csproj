@@ -137,6 +137,7 @@
     </Compile>
     <Compile Include="Models\BoardModels.cs" />
     <Compile Include="Models\LoginModels.cs" />
+    <Compile Include="Models\UpDownModels.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -461,6 +462,7 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Scripts\Upload.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

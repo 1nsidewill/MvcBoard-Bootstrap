@@ -9,6 +9,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Dapper;
+using System.IO;
 
 namespace MvcBoard.Controllers
 {
@@ -125,7 +126,7 @@ namespace MvcBoard.Controllers
         // POST: Board/Create
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Create(Board _board)
+        public ActionResult Create(Board _board, HttpPostedFileBase files)
         {
             try
             {
@@ -135,6 +136,15 @@ namespace MvcBoard.Controllers
                     var username = db.QuerySingleOrDefault<string>("SELECT UserName From userdb WHERE UserId = @identityName", new {identityName = identityName });
                     string sqlQuery = "Insert Into mvcboard (board_name, board_subject, board_content, board_writeTime) Values(@board_name, @board_subject, @board_content, GETDATE())";
                     var rowsAffected = db.Execute(sqlQuery, new { board_name = username, board_subject = _board.board_subject, board_content = _board.board_content });
+
+                    Stream str = files.InputStream;
+                    BinaryReader Br = new BinaryReader(str);
+                    Byte[] FileDet = Br.ReadBytes((Int32)str.Length);
+
+                    FileDetailsModel Fd = new Models.FileDetailsModel();
+                    Fd.FileTitle = files.FileName;
+                    Fd.FileContent = FileDet;
+                    SaveFileDetails(Fd);
                 }
 
                 return RedirectToAction("Index");
@@ -219,5 +229,54 @@ namespace MvcBoard.Controllers
         {
             return View();
         }
+
+
+        [HttpGet]
+        public FileResult DownLoadFile(int id)
+        {
+            List<FileDetailsModel> ObjFiles = GetFileList();
+
+            var FileById = (from FC in ObjFiles
+                            where FC.FileId.Equals(id)
+                            select new { FC.FileTitle, FC.FileContent }).ToList().FirstOrDefault();
+
+            return File(FileById.FileContent, "application/pdf", FileById.FileTitle);
+
+        }
+
+
+        #region View Uploaded files  
+        [HttpGet]
+        public PartialViewResult FileDetails()
+        {
+            List<FileDetailsModel> DetList = GetFileList();
+
+            return PartialView("FileDetails", DetList);
+        }
+        private List<FileDetailsModel> GetFileList()
+        {
+            List<FileDetailsModel> DetList = new List<FileDetailsModel>();
+
+            using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
+            {
+                DetList = db.Query<FileDetailsModel>("GetFile", commandType: CommandType.StoredProcedure).ToList();
+                return DetList;
+            }    
+
+        }
+
+        #endregion
+
+        #region Database related operations  
+        private void SaveFileDetails(FileDetailsModel objDet)
+        {
+            using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
+            {
+                string sqlQuery = "Insert Into mvcboard (FileTitle, FileContent) Values(@FileTitle, @FileContent)";
+                db.Execute(sqlQuery, new { FileTitle = objDet.FileTitle, FileContent = objDet.FileContent});               
+            }
+        }
+        #endregion
+
     }
 }
