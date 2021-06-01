@@ -15,10 +15,12 @@
                 <div class="navbar-header">
                     @Html.ActionLink("홈", "Index", "Board", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
-                <h1 style="text-align: center">BOARD</h1>
+                <h1 style="text-align:center">BOARD</h1>
+
                 <div class="navbar-right">
-                    @Html.ActionLink("로그아웃", "LogOut", "Account", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("로그아웃", "LogOut", "Account", new { area = "" }, new { @class = "navbar-brand", @onclick = "return confirm('로그아웃 하시겠습니까?')" })
                 </div>
+
             }
 
             else

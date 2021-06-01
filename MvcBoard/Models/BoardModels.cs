@@ -17,5 +17,17 @@ namespace MvcBoard.Models
         public DateTime board_writeTime { get; set; }
         public int board_readCount { get; set; }
         public string board_name { get; set; }
+
+        [DataType(DataType.Upload)]
+        [Display(Name = "Select File")]
+        public HttpPostedFileBase files { get; set; }
+    }
+
+    public class FileDetailsModel
+    {
+        public int FileId { get; set; }
+        [Display(Name = "Uploaded File")]
+        public String FileTitle {get; set; }
+        public byte[] FileContent { get; set; }
     }
 }
