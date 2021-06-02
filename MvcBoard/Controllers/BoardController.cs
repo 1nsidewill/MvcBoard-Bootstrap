@@ -84,30 +84,57 @@ namespace MvcBoard.Controllers
             try
             {
                 Board _board = new Board();
+
                 using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
                 {
-                    string test = @"
+                    string fileQuery = @"
+                    SELECT FileTitle 
+                    FROM mvcboard 
+                    WHERE board_postNo = @id";
+
+                    string fullQuery = @"
                     DECLARE @board_count INT 
                     SELECT @board_count = (board_readCount + 1) FROM mvcboard WHERE board_postNo = @id
 
                     UPDATE mvcboard SET board_readCount = @board_count WHERE board_postNo = @id
 
                     SELECT
-                        *
+                        board_postNo, board_subject, board_content, board_name, board_writeTime, board_readCount, FileTitle, FileContent
                     FROM
                         mvcboard
                     WHERE
                         board_postNo = @id
-
-
                 ";
 
-                    _board = db.Query<Board>(test, new { @id = id }).SingleOrDefault();
+                    string boardQuery = @"
+                    DECLARE @board_count INT 
+                    SELECT @board_count = (board_readCount + 1) FROM mvcboard WHERE board_postNo = @id
+
+                    UPDATE mvcboard SET board_readCount = @board_count WHERE board_postNo = @id
+
+                    SELECT
+                        board_postNo, board_subject, board_content, board_name, board_writeTime, board_readCount
+                    FROM
+                        mvcboard
+                    WHERE
+                        board_postNo = @id
+                ";
 
 
+                    if (db.Query(fileQuery, new { @id = id }) != null)
+                    {
+                        _board = db.Query<Board>(fullQuery, new { @id = id }).SingleOrDefault();
+
+                        return View(_board);
+                    }
+
+                    else
+                    {
+                        _board = db.Query<Board>(boardQuery, new { @id = id }).SingleOrDefault();
+
+                        return View(_board);
+                    }
                 }
-
-                return View(_board);
             }
             catch
             {
@@ -126,28 +153,51 @@ namespace MvcBoard.Controllers
         // POST: Board/Create
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Create(Board _board, HttpPostedFileBase files)
+        public ActionResult Create(Board _board)
         {
             try
             {
                 using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
                 {
-                    string identityName = User.Identity.Name;
-                    var username = db.QuerySingleOrDefault<string>("SELECT UserName From userdb WHERE UserId = @identityName", new {identityName = identityName });
-                    string sqlQuery = "Insert Into mvcboard (board_name, board_subject, board_content, board_writeTime) Values(@board_name, @board_subject, @board_content, GETDATE())";
-                    var rowsAffected = db.Execute(sqlQuery, new { board_name = username, board_subject = _board.board_subject, board_content = _board.board_content });
+                    if (_board.upfiles != null)
+                    {
+                        Stream str = _board.upfiles.InputStream;
+                        BinaryReader Br = new BinaryReader(str);
+                        Byte[] FileDet = Br.ReadBytes((Int32)str.Length);
+                        string identityName = User.Identity.Name;
+                        var username = db.QuerySingleOrDefault<string>("SELECT UserName " +
+                                                                       "From userdb WHERE UserId = @identityName", new { identityName = identityName });
+                        string sqlQuery = "Insert Into mvcboard (board_name, board_subject, board_content, " +
+                                                                "board_writeTime, FileTitle, FileContent) " +
+                                                                "Values(@board_name, @board_subject, @board_content, GETDATE(), @FileTitle, @FileContent)";
+                        var rowsAffected = db.Execute(sqlQuery, new
+                        {
+                            board_name = username,
+                            board_subject = _board.board_subject,
+                            board_content = _board.board_content,
+                            FileTitle = _board.upfiles.FileName,
+                            FileContent = FileDet
+                        });
+                    }
+                    else
+                    {
+                        string identityName = User.Identity.Name;
+                        var username = db.QuerySingleOrDefault<string>("SELECT UserName " +
+                                                                       "From userdb WHERE UserId = @identityName", new { identityName = identityName });
+                        string sqlQuery = "Insert Into mvcboard (board_name, board_subject, board_content, " +
+                                                                "board_writeTime) " +
+                                                                "Values(@board_name, @board_subject, @board_content, GETDATE())";
+                        var rowsAffected = db.Execute(sqlQuery, new
+                        {
+                            board_name = username,
+                            board_subject = _board.board_subject,
+                            board_content = _board.board_content,
+                        });
+                    }
 
-                    Stream str = files.InputStream;
-                    BinaryReader Br = new BinaryReader(str);
-                    Byte[] FileDet = Br.ReadBytes((Int32)str.Length);
-
-                    FileDetailsModel Fd = new Models.FileDetailsModel();
-                    Fd.FileTitle = files.FileName;
-                    Fd.FileContent = FileDet;
-                    SaveFileDetails(Fd);
                 }
-
                 return RedirectToAction("Index");
+
             }
             catch
             {
@@ -178,16 +228,36 @@ namespace MvcBoard.Controllers
 
         // POST: Board/Edit/5  
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Edit(Board _board)
         {
             try
             {
                 using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
                 {
+                    if (_board.upfiles != null)
+                    {
+                        Stream str = _board.upfiles.InputStream;
+                        BinaryReader Br = new BinaryReader(str);
+                        Byte[] FileDet = Br.ReadBytes((Int32)str.Length);
+                        string sqlQuery = "update mvcboard set board_subject='" + _board.board_subject +
+                                          "',board_content='" + _board.board_content +
+                                          "',FileTitle='" + _board.upfiles.FileName +
+                                          "',FileContent='" + FileDet +
+                                          "' where board_postNo=" + _board.board_postNo;
 
-                    string sqlQuery = "update mvcboard set board_subject='" + _board.board_subject + "',board_content='" + _board.board_content + "' where board_postNo=" + _board.board_postNo;
 
-                    int rowsAffected = db.Execute(sqlQuery);
+                        db.Execute(sqlQuery);
+
+                    }
+
+                    else
+                    {
+                        string sqlQuery = "update mvcboard set board_subject='" + _board.board_subject +
+                                          "',board_content='" + _board.board_content +
+                                          "' where board_postNo=" + _board.board_postNo;
+                        int rowsAffected = db.Execute(sqlQuery);
+                    }
                 }
 
                 return RedirectToAction("Index");
@@ -231,39 +301,42 @@ namespace MvcBoard.Controllers
         }
 
 
-        [HttpGet]
-        public FileResult DownLoadFile(int id)
-        {
-            List<FileDetailsModel> ObjFiles = GetFileList();
+        //[HttpGet]
+        //public FileResult DownLoadFile(int id)
+        //{
+        //    List<FileDetailsModel> ObjFiles = GetFileList();
 
-            var FileById = (from FC in ObjFiles
-                            where FC.FileId.Equals(id)
-                            select new { FC.FileTitle, FC.FileContent }).ToList().FirstOrDefault();
+        //    var FileById = (from FC in ObjFiles
+        //                    where FC.FileId.Equals(id)
+        //                    select new { FC.FileName, FC.FileContent }).ToList().FirstOrDefault();
 
-            return File(FileById.FileContent, "application/pdf", FileById.FileTitle);
+        //    return File(FileById.FileContent, "application/pdf", FileById.FileName);
 
-        }
+        //}
 
 
         #region View Uploaded files  
-        [HttpGet]
-        public PartialViewResult FileDetails()
-        {
-            List<FileDetailsModel> DetList = GetFileList();
+        //[HttpGet]
+        //public PartialViewResult FileDetails()
+        //{
+        //    List<FileDetailsModel> DetList = GetFileList();
 
-            return PartialView("FileDetails", DetList);
-        }
-        private List<FileDetailsModel> GetFileList()
-        {
-            List<FileDetailsModel> DetList = new List<FileDetailsModel>();
+        //    return PartialView("FileDetails", DetList);
+        //}
+        //private List<FileDetailsModel> GetFileList()
+        //{
+        //    List<FileDetailsModel> DetList = new List<FileDetailsModel>();
 
-            using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
-            {
-                DetList = db.Query<FileDetailsModel>("GetFile", commandType: CommandType.StoredProcedure).ToList();
-                return DetList;
-            }    
+        //    using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
+        //    {
+        //        string sqlQuery = "SELECT FileTitle, FileContent From mvcboard WHERE board_postNo = @id";
+        //        DetList = db.Query<FileDetailsModel>(sqlQuery, new { @id = id }).ToList();
+        //        return DetList;
+        //    }
 
-        }
+        //}
+
+
 
         #endregion
 
@@ -272,11 +345,15 @@ namespace MvcBoard.Controllers
         {
             using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
             {
-                string sqlQuery = "Insert Into mvcboard (FileTitle, FileContent) Values(@FileTitle, @FileContent)";
-                db.Execute(sqlQuery, new { FileTitle = objDet.FileTitle, FileContent = objDet.FileContent});               
+                DynamicParameters Parm = new DynamicParameters();
+                Parm.Add("@FileName", objDet.FileName);
+                Parm.Add("@FileContent", objDet.FileContent);
+                db.Execute("AddFile", Parm, commandType: System.Data.CommandType.StoredProcedure);
             }
         }
         #endregion
 
     }
 }
+
+// hello
