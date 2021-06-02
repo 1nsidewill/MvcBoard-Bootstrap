@@ -36,6 +36,29 @@
     </tr>
 </table>
 
+<table class="table table-bordered">
+    <tr>
+        <th class="col-md-4">
+            @Html.DisplayNameFor(model => model.FileTitle)
+        </th>
+
+        <th class="col-md-2"></th>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(model => model.FileTitle)
+        </td>
+
+        <td>
+            @Html.ActionLink("Downlaod", "DownLoadFile", new { id = @Model.board_postNo })
+
+        </td>
+    </tr>
+
+
+
+</table>
+
 <div class="text-center">
     @Html.ActionLink("수정", "Edit", new { id = Model.board_postNo }, new { @class = "btn btn-primary", @onclick = "return confirm('수정 하시겠습니까?')" })
     <button class="btn btn-success" onclick="history.go(-1);">목록</button>

@@ -301,18 +301,22 @@ namespace MvcBoard.Controllers
         }
 
 
-        //[HttpGet]
-        //public FileResult DownLoadFile(int id)
-        //{
-        //    List<FileDetailsModel> ObjFiles = GetFileList();
+        [HttpGet]
+        public FileResult DownLoadFile(int id)
+        {
+            using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
+            {
+                string sqlQuery = "SELECT board_postNo, FileTitle, FileContent From mvcboard WHERE board_postNo = @id";
+                List<Board> ObjFiles = db.Query<Board>(sqlQuery, new { @id = id }).ToList();
 
-        //    var FileById = (from FC in ObjFiles
-        //                    where FC.FileId.Equals(id)
-        //                    select new { FC.FileName, FC.FileContent }).ToList().FirstOrDefault();
+                var FileById = (from FC in ObjFiles
+                                where FC.board_postNo.Equals(id)
+                                select new { FC.FileTitle, FC.FileContent }).ToList().FirstOrDefault();
 
-        //    return File(FileById.FileContent, "application/pdf", FileById.FileName);
+                return File(FileById.FileContent, "application/pdf", FileById.FileTitle);
+            }
 
-        //}
+        }
 
 
         #region View Uploaded files  
@@ -323,6 +327,7 @@ namespace MvcBoard.Controllers
 
         //    return PartialView("FileDetails", DetList);
         //}
+
         //private List<FileDetailsModel> GetFileList()
         //{
         //    List<FileDetailsModel> DetList = new List<FileDetailsModel>();
