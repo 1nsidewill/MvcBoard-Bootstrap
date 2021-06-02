@@ -20,14 +20,17 @@ namespace MvcBoard.Models
 
         [DataType(DataType.Upload)]
         [Display(Name = "Select File")]
-        public HttpPostedFileBase files { get; set; }
+        public HttpPostedFileBase upfiles { get; set; }
+
+        [Display(Name = "Uploaded File")]
+        public String FileTitle { get; set; }
+        public byte[] FileContent { get; set; }
     }
 
     public class FileDetailsModel
     {
-        public int FileId { get; set; }
         [Display(Name = "Uploaded File")]
-        public String FileTitle {get; set; }
+        public String FileName { get; set; }
         public byte[] FileContent { get; set; }
     }
 }

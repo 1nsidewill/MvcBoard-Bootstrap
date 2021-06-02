@@ -9,7 +9,7 @@
 <div class="panel panel-primary">
     <div class="panel-heading panel-head"></div>
     <div class="panel-body">
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("Create", "Board", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
 
@@ -27,14 +27,15 @@
                     </div>
                 </div>
             </div>
+
             <div class="form-horizontal">
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group">
-                    @Html.LabelFor(model => model.files, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.upfiles, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.files, "", new { @type = "file", @multiple = "multiple" })
-                        @Html.ValidationMessageFor(model => model.files, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(model => model.upfiles, "", new { @type = "file", @multiple = "multiple" })
+                        @Html.ValidationMessageFor(model => model.upfiles, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -46,6 +47,8 @@
                 <script src="~/Scripts/jquery.validate.min.js"></script>
                 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
             </div>
+
+
             <div class="text-center">
                 <button type="submit" class="btn btn-primary" onclick="submitForms(); return false;">작성</button>
                 @Html.ActionLink("취소", "Index", null, new { @class = "btn btn-success", @onclick = "return confirm('취소 하시겠습니까?')" })
@@ -53,11 +56,12 @@
                     submitForms = function () {
                         if (confirm('게시글을 작성하시겠습니까?') == true) {
                             document.submit();
+
                         }
                     }
                 </script>
             </div>
-        }
+         }
     </div>
 </div>
 
