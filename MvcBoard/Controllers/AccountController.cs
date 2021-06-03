@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using MvcBoard.Models;
 using Dapper;
 using System.Web.Security;
+using System.Data;
 
 namespace MvcBoard.Controllers
 {
@@ -29,7 +30,7 @@ namespace MvcBoard.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (System.Data.IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
+                using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
                 {
                     string sqlQuery = "SELECT * FROM userdb";
                     var user = db.Query(sqlQuery).FirstOrDefault(u => u.UserId.Equals(model.UserId) &&
@@ -61,7 +62,7 @@ namespace MvcBoard.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (System.Data.IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
+                using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
                 {
                     string sqlQuery = "Insert Into userdb (UserId, UserPassword, UserName, RegisterDate) Values(@UserId, @UserPassword, @UserName, GETDATE())";
                     var rowsAffected = db.Execute(sqlQuery, new { UserId = model.UserId, UserPassword = model.UserPassword, UserName = model.UserName });
@@ -75,5 +76,59 @@ namespace MvcBoard.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
+
+        // GET: User/UserEdit  
+        public ActionResult UserEdit()
+        {
+            User _user = new User();
+            using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
+            {
+                string UserId = User.Identity.Name;
+                _user = db.Query<User>("Select UserName, UserPassword From userdb " +
+                                        "WHERE UserId = @UserId", new { UserId = UserId }).SingleOrDefault();
+            }
+            return View(_user);
+
+
+        }
+
+        // POST: User/UserEdit
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult UserEdit(User _user)
+        {
+            using (IDbConnection db = new SqlConnection(DapperLib.Config.DBConnStrTest()))
+            {
+                string UserId = User.Identity.Name;
+                var username = db.QuerySingleOrDefault<string>("SELECT UserName " +
+                                                               "From userdb WHERE UserId = @UserId", new { UserId = UserId });
+
+                if (username != _user.UserName)
+                {
+                    string sqlQuery = "update userdb set UserName='" + _user.UserName +
+                                      "',UserPassword='" + _user.UserPassword +
+                                      "' where UserId= @UserId";
+                    
+                    string boardQuery = "update mvcboard set board_name='" + _user.UserName +
+                                      "' where UserId= @UserId";
+
+                    db.Execute(sqlQuery, new { UserId = UserId });
+                    db.Execute(boardQuery, new { UserId = UserId });
+                }
+
+                else
+                {
+                    string sqlQuery = "update userdb set UserName='" + _user.UserName +
+                                      "',UserPassword='" + _user.UserPassword +
+                                      "' where UserId= @UserId";
+                    db.Execute(sqlQuery, new { UserId = UserId });
+                }
+
+            }
+
+            return RedirectToAction("Index", "Board");
+
+        }
+
     }
 }

@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-    <title>Login V8</title>
+    <title>회원가입</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="~/Login_v8/images/icons/favicon.ico" />
@@ -42,6 +42,10 @@
                         @Html.PasswordFor(model => model.UserPassword, new { @class = "input100", @placeholder = "Password" })
                         <span class="focus-input100"></span>
                     </div>
+                    <div class="wrap-input100 validate-input m-b-16" data-validate="비밀번호를 입력하세요">
+                        @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "input100", @placeholder = "Confirm Password" })
+                        <span class="focus-input100"></span>
+                    </div>
 
                     <div class="wrap-input100 validate-input" data-validate="이름을 입력하세요">
                         @Html.TextBoxFor(model => model.UserName, new { @class = "input100", @placeholder = "Name" })
@@ -57,8 +61,8 @@
 
         <a href="#" class="txt2">
         Username / Password?
-        </a>
         </div>*@
+                    </a>
 
                     <div class="container-login100-form-btn" style="margin-top: 50px;">
                         <button class="login100-form-btn">

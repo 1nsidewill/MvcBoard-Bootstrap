@@ -18,11 +18,14 @@ namespace MvcBoard.Models
         public int board_readCount { get; set; }
         public string board_name { get; set; }
 
+        [Required]
+        public string UserId { get; set; }
+
         [DataType(DataType.Upload)]
         [Display(Name = "Select File")]
         public HttpPostedFileBase upfiles { get; set; }
 
-        [Display(Name = "Uploaded File")]
+        [Display(Name = "첨부 파일")]
         public String FileTitle { get; set; }
         public byte[] FileContent { get; set; }
     }
