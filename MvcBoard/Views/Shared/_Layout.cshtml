@@ -4,23 +4,62 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/dropdown-18/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="~/dropdown-18/css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/dropdown-18/css/bootstrap.min.css">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="~/dropdown-18/css/style.css">
+
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             @if (User.Identity.IsAuthenticated)
             {
-                <div class="navbar-header">
-                    @Html.ActionLink("홈", "Index", "Board", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <h1 style="text-align:center">BOARD</h1>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link">@Html.ActionLink("HOME", "Index", "Board")</a>
+                    </li>
+                </ul>
 
-                <div class="navbar-right">
-                    @Html.ActionLink("로그아웃", "LogOut", "Account", new { area = "" }, new { @class = "navbar-brand", @onclick = "return confirm('로그아웃 하시겠습니까?')" })
-                </div>
+                <a class="navbar-brand mx-auto" href="#">MVC BOARD</a>
 
+
+
+
+                <div class="navbar-nav ml-auto">
+                    <div>
+                        <div class="dropdown custom-dropdown">
+                            <a href="#" data-toggle="dropdown" class="d-flex align-items-center dropdown-link text-left" aria-haspopup="true" aria-expanded="false" data-offset="0, 20">
+                                <div class="profile-pic mr-3">
+                                    <img src="~/dropdown-18/images/will profile2.jpg" alt="Image">
+                                </div>
+                                <div class="profile-info">
+                                    <h3>@Session["UserName"]</h3>
+                                    <span>@User.Identity.Name</span>
+                                </div>
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="@Url.Action("UserEdit", "Account")"><span class="icon icon-cog"></span>개인정보 수정</a>
+                                <a class="dropdown-item" href="@Url.Action("LogOut", "Account")" onclick="return confirm ('로그아웃 하시겠습니까?')"><span class="icon icon-sign-out"></span>로그아웃</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
 
             else
@@ -33,18 +72,22 @@
                     @Html.ActionLink("로그인", "Login", "Account", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
             }
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        @*<footer>
-            <p>&copy; @DateTime.Now.Year - ASP.NET MVC Board</p>
-        </footer>*@
-    </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+        </div>
+        </nav>
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            @*<footer>
+                <p>&copy; @DateTime.Now.Year - ASP.NET MVC Board</p>
+            </footer>*@
+        </div>
+
+
+        <script src="~/dropdown-18/js/jquery-3.3.1.min.js"></script>
+        <script src="~/dropdown-18/js/popper.min.js"></script>
+        <script src="~/dropdown-18/js/bootstrap.min.js"></script>
+        <script src="~/dropdown-18/js/owl.carousel.min.js"></script>
+        <script src="~/dropdown-18/js/main.js"></script>
 </body>
 </html>

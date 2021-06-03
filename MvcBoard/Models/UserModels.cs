@@ -20,6 +20,9 @@ namespace MvcBoard.Models
         [Required(ErrorMessage = "비밀번호를 입력하세요!")]
         public string UserPassword { get; set; }
 
+        [Compare("UserPassword", ErrorMessage = "비밀번호가 일치하지 않습니다!")]
+        public string ConfirmPassword { get; set; }
+
         [Required]
         public DateTime RegisterDate { get; set; }
     }
