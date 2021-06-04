@@ -2,14 +2,15 @@
 Korean Style Bulletin Board (게시판)
 Built With ASP.NET MVC Framework
 
+* LOGIN PAGE
 ![화면 캡처 2021-06-04 105901](https://user-images.githubusercontent.com/75239607/120734658-3f835c00-c524-11eb-873a-579f06202535.png)
-
+* INDEX PAGE (BOARD)
 ![화면 캡처 2021-06-04 105942](https://user-images.githubusercontent.com/75239607/120734673-4316e300-c524-11eb-8259-78b06fead72d.png)
-
+* ASP.NET MVC 5.2.7
 ![화면 캡처 2021-06-04 110043](https://user-images.githubusercontent.com/75239607/120734687-48742d80-c524-11eb-9684-860c7fde223b.png)
-
+* ASP.NET MVC 5.2.7
 ![화면 캡처 2021-06-04 110006](https://user-images.githubusercontent.com/75239607/120734693-49a55a80-c524-11eb-84f3-4f5740ce903d.png)
-
+* ASP.NET MVC 5.2.7
 ![화면 캡처 2021-06-04 110024](https://user-images.githubusercontent.com/75239607/120734698-4b6f1e00-c524-11eb-8486-295a673343d5.png)
 
 
