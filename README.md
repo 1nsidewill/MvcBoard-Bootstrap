@@ -16,21 +16,27 @@ Visual Studio 2019 Enterprise
 Microsoft SQL Server Management Studio 18 (MSSQL)
 
 
-# table
 
-| 1 col | 2 col | 3 col | 4 col |  
-| ------|:------|:-----:|-------:|
-| qwet  |  tewt |  watr | astwe |
+# Reference
 
-# 링크
+* Understanding Basic WorkFlow
+https://blog.naver.com/wow0815/90179539274
 
-구글로 가고싶으면 [이것](https://www.google.co.kr)을 클릭하세요.  
+* CRUD using Dapper
+https://www.c-sharpcorner.com/uploadfile/0c1bb2/crud-operations-in-asp-net-mvc-5-using-dapper-orm/
 
-구글 홈페이지 : https://www.google.co.kr  
+* Summernote TextEditor
+http://haneefputtur.com/wysiwyg-bootstrap-asp-net-mvc-image-upload-feature.html
 
-강조효과  [test](#Emphasis-Is-Here)
+* Paging & Search Logic
+https://www.youtube.com/watch?v=IXBD7TUW-OY
 
-![구글 로고](https://ppss.kr/wp-content/uploads/2015/09/google-logo-874x288.png "마우스 위에 가져다 두면 이 글 나옴" )
+* File Upload & Download
+1. Using Binary
+https://www.c-sharpcorner.com/article/uploading-downloading-pdf-files-in-binary-format-using-fileresult-in-asp-net-mvc/
+2. Using Local FilePath
+https://www.c-sharpcorner.com/article/asp-net-mvc-form-with-file-upload/ -U
+
 
 
 > 너 자신을 알라.   
