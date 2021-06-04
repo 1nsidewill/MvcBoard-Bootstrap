@@ -166,9 +166,18 @@ namespace MvcBoard.Controllers
                 {
                     if (_board.upfiles != null)
                     {
-                        Stream str = _board.upfiles.InputStream;
-                        BinaryReader Br = new BinaryReader(str);
-                        Byte[] FileDet = Br.ReadBytes((Int32)str.Length);
+                        string FileTitle = Path.GetFileNameWithoutExtension(_board.upfiles.FileName);
+
+                        string FileExtension = Path.GetExtension(_board.upfiles.FileName);
+
+                        FileTitle = DateTime.Now.ToString("yyyyMMdd")+ "-" +FileTitle.Trim() + FileExtension;
+
+                        string UploadPath = ConfigurationManager.AppSettings["FilePath"].ToString();
+
+                        _board.FileContent = UploadPath + FileTitle;
+
+                        _board.upfiles.SaveAs(_board.FileContent);
+
                         string sqlQuery = "Insert Into mvcboard (board_name, board_subject, board_content, " +
                                                                 "board_writeTime, FileTitle, FileContent, UserId) " +
                                                                 "Values(@board_name, @board_subject, @board_content, GETDATE(), @FileTitle, @FileContent, @UserId)";
@@ -177,8 +186,8 @@ namespace MvcBoard.Controllers
                             board_name = Session["UserName"],
                             board_subject = _board.board_subject,
                             board_content = _board.board_content,
-                            FileTitle = _board.upfiles.FileName,
-                            FileContent = FileDet,
+                            FileTitle = FileTitle,
+                            FileContent = _board.FileContent,
                             UserId = User.Identity.Name
                         });
 

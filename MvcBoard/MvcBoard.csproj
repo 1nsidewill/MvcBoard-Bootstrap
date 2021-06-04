@@ -643,7 +643,6 @@
     <Content Include="Scripts\summernote\summernote-lite.min.js.map" />
     <Content Include="Scripts\summernote\summernote.js.map" />
     <Content Include="Scripts\summernote\summernote.min.js.map" />
-    <Content Include="Views\Board\View.cshtml" />
     <Content Include="Views\Account\UserEdit.cshtml" />
     <Content Include="signup-form-14\.DS_Store" />
     <Content Include="signup-form-14\css\.DS_Store" />
