@@ -37,25 +37,17 @@ https://www.youtube.com/watch?v=IXBD7TUW-OY
 1. Using Binary
 https://www.c-sharpcorner.com/article/uploading-downloading-pdf-files-in-binary-format-using-fileresult-in-asp-net-mvc/
 2. Using Local FilePath
-https://www.c-sharpcorner.com/article/asp-net-mvc-form-with-file-upload/ -U
+https://www.c-sharpcorner.com/article/asp-net-mvc-form-with-file-upload/
 
 
 
-> 너 자신을 알라.   
-> 나도 나를 모른다. 소크라테스 
+> A Mixture of codes written by Professional Developers  
+> Thank You C# Corner & StackOverflow
 > 
 
 
-    def sum(a,b):
-      return a + b
-      
-      
-```python
-name = "world"
-print(name)
-```
 
-python 에서 `random` 패키지에서 `randint` 함수를 사용하세요.
+
 
 <!--
 아아아아아아악앙극ㅂ자갑ㅈ갑작 이거 주석이라 화면에선 안보임~~
